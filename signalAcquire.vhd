@@ -59,6 +59,22 @@ begin
 		    rfData => rfData;
 		);
 	
-	
+	first_compare: genericCompare
+        GENERIC MAP(16)
+        PORT MAP(x => rfData, y => FIRST_THRESHOLD_CONSTANT, g => reg0Magnitude[FIRST_THRESHOLD_BIT_INDEX], e => open, l => open);
  
+	second_compare: genericCompare
+        GENERIC MAP(16)
+        PORT MAP(x => rfData, y => SECOND_THRESHOLD_CONSTANT, g => reg0Magnitude[SECOND_THRESHOLD_BIT_INDEX], e => open, l => open);
+
+	third_compare: genericCompare
+        GENERIC MAP(16)
+        PORT MAP(x => rfData, y => THIRD_THRESHOLD_CONSTANT, g => reg0Magnitude[THIRD_THRESHOLD_BIT_INDEX], e => open, l => open);
+
+	fourth_compare: genericCompare
+        GENERIC MAP(16)
+        PORT MAP(x => rfData, y => FOURTH_THRESHOLD_CONSTANT, g => reg0Magnitude[FOURTH_THRESHOLD_BIT_INDEX], e => open, l => open);
+
+	
+		
 end behavior;
