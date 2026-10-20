@@ -40,8 +40,6 @@ architecture behavior of signalAcquire_Datapath is
   	signal rf_cnt: STD_LOGIC_VECTOR(2 downto 0);
   	signal short_cnt: STD_LOGIC_VECTOR(7 downto 0);
   	signal long_cnt: STD_LOGIC_VECTOR(23 downto 0);
-  	signal data: STD_LOGIC_VECTOR(15 downto 0);
-  	signal scomp, lcomp, rcomp: STD_LOGIC;
 
 begin
     
@@ -59,29 +57,18 @@ begin
         
     signalRegister: generic8RegisterFile
         GENERIC MAP(16)
-        PORT MAP(clk => clk, resetn => resetn, write => cw(0), wrAddr => rf_cnt, rdAddr => rfAddr, D => an7606data, Q => data);
+        PORT MAP(clk => clk, resetn => resetn, write => cw(0), wrAddr => rf_cnt, rdAddr => rfAddr, D => an7606data, Q => rfData);
         
     addr_compare: genericCompare
         GENERIC MAP(4)
-        PORT MAP(x => rf_cnt, y => "0111", g => open, e => rcomp, l => open);
+        PORT MAP(x => rf_cnt, y => "0111", g => open, e => sw[ALL_CHANNELS_HAVE_BEEN_READ_SW_BIT_INDEX], l => open);
 
     short_compare: genericCompare
         GENERIC MAP(8)
-        PORT MAP(x => short_cnt, y => SHORT_DELAY_50Mhz_COUNTS, g => open, e => scomp, l => open);
+        PORT MAP(x => short_cnt, y => SHORT_DELAY_50Mhz_COUNTS, g => open, e => sw[SHORT_DELAY_DONE_SW_BIT_INDEX], l => open);
         
     long_compare: genericCompare
         GENERIC MAP(24)
-        PORT MAP(x => long_cnt, y => LONG_DELAY_50Mhz_COUNTS, g => open, e => lcomp, l => open);
+        PORT MAP(x => long_cnt, y => LONG_DELAY_50Mhz_COUNTS, g => open, e => sw[LONG_DELAY_DONE_SW_BIT_INDEX], l => open);
 
-    process(clk)
-    begin
-        if rising_edge(clk) then
-            if resetn = '0' then
-               sw <= (others => '0');
-            else   
-                sw <= rcomp & scomp & lcomp;
-            end if;
-        end if;
-                
-    end process;
 end behavior;
