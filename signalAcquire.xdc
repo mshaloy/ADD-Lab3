@@ -91,3 +91,16 @@ set_property IOSTANDARD LVCMOS33 [get_ports an7606data[14]]
 set_property PACKAGE_PIN T12 [get_ports an7606data[15]]
 set_property IOSTANDARD LVCMOS33 [get_ports an7606data[15]]
 
+
+set_property PACKAGE_PIN W15 [get_ports an7606busy]
+set_property IOSTANDARD LVCMOS33 [get_ports an7606busy]
+
+
+set_property PACKAGE_PIN V15 [get_ports an7606cs]
+set_property IOSTANDARD LVCMOS33 [get_ports an7606cs]
+
+set_property PACKAGE_PIN Y17 [get_ports an7606rd]
+set_property IOSTANDARD LVCMOS33 [get_ports an7606rd]
+
+set_property PACKAGE_PIN Y16 [get_ports an7606reset]
+set_property IOSTANDARD LVCMOS33 [get_ports an7606reset]
