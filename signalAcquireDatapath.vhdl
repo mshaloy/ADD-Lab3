@@ -52,12 +52,12 @@ begin
         PORT MAP(c => cw(4 downto 3), d => x"00", q => short_cnt, clk =>clk, resetn => resetn);
         
     long_counter: genericCounter
-        GENERIC MAP(8)
-        PORT MAP(c => cw(6 downto 5), d => x"00", q => long_cnt, clk =>clk, resetn => resetn);
+        GENERIC MAP(24)
+        PORT MAP(c => cw(6 downto 5), d => x"000000", q => long_cnt, clk =>clk, resetn => resetn);
         
     signalRegister: generic8RegisterFile
         GENERIC MAP(16)
-        PORT MAP(clk => clk, resetn => resetn, write => cw(0), wrAddr => rf_cnt, rdAddr => rfAddr, D => an7606data, Q => rfData);
+        PORT MAP(clk => clk, resetn => resetn, write => cw(0), wrAddr => rf_cnt(2 downto 0), rdAddr => rfAddr, D => an7606data, Q => rfData);
         
     addr_compare: genericCompare
         GENERIC MAP(4)
@@ -70,5 +70,16 @@ begin
     long_compare: genericCompare
         GENERIC MAP(24)
         PORT MAP(x => long_cnt, y => LONG_DELAY_50Mhz_COUNTS, g => open, e => sw(LONG_DELAY_DONE_SW_BIT_INDEX), l => open);
-   
+    
+    state_process: process(clk)
+    begin
+        if (rising_edge(clk)) then
+            if (resetn = '0') then
+                rf_cnt <= (others => '0');
+                short_cnt <= (others => '0');
+                long_cnt <= (others => '0');
+                sw(DATAPATH_SW_WIDTH-1 downto 0) <= (others => '0');
+            end if;
+        end if;
+    end process;
 end behavior;

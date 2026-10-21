@@ -55,7 +55,7 @@ begin
 			clk => clk,
         	resetn => resetn,
 			cw => cw,
-			sw => sw,
+			sw => sw(2 downto 0),
 		    an7606data => an7606data,
 		    rfAddr => "000",
 		    rfData => rfData
@@ -79,7 +79,7 @@ begin
 	
 	btnChange <= btnPrev xor btn;
 
-	process(clk)
+	button: process(clk)
 	begin
 		if rising_edge(clk) then 
 			if resetn = '0' then
