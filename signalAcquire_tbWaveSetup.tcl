@@ -6,17 +6,6 @@
 restart
 remove_wave [get_waves *]
 
-add_wave -color green {/signalAcquire_tb/clk_t}
-add_wave -color green {/signalAcquire_tb/resetn_t}
-add_wave -color green -radix unsigned {/signalAcquire_tb/btn_t}
-add_wave -color green -radix hex {/signalAcquire_tb/an7606data_t}
-add_wave -color green {/signalAcquire_tb/an7606convst_t}
-add_wave -color green {/signalAcquire_tb/an7606cs_t}
-add_wave -color green {/signalAcquire_tb/an7606rd_t}
-add_wave -color green {/signalAcquire_tb/an7606reset_t}
-add_wave -color green -radix unsigned {/signalAcquire_tb/an7606od_t}
-add_wave -color green {/signalAcquire_tb/an7606busy_t}
-
 add_wave -color green {/signalAcquire_tb/uut/clk}
 add_wave -color green {/signalAcquire_tb/uut/resetn}
 add_wave -color green -radix unsigned {/signalAcquire_tb/uut/btn}
@@ -42,3 +31,8 @@ add_wave -color red -radix unsigned -name Trigger {/signalAcquire_tb/uut/sw[3]}
 add_wave -color yellow -radix hex {/signalAcquire_tb/uut/dataP/signalRegister/Q0}
 add_wave -color yellow -radix hex {/signalAcquire_tb/uut/dataP/signalRegister/Q1}
 add_wave -color yellow -radix hex {/signalAcquire_tb/uut/dataP/signalRegister/Q2}
+add_wave -color yellow -radix hex {/signalAcquire_tb/uut/dataP/signalRegister/Q3}
+add_wave -color yellow -radix hex {/signalAcquire_tb/uut/dataP/signalRegister/Q4}
+add_wave -color yellow -radix hex {/signalAcquire_tb/uut/dataP/signalRegister/Q5}
+add_wave -color yellow -radix hex {/signalAcquire_tb/uut/dataP/signalRegister/Q6}
+add_wave -color yellow -radix hex {/signalAcquire_tb/uut/dataP/signalRegister/Q7}
