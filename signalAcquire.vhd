@@ -37,7 +37,8 @@ architecture behavior of signalAcquire is
     signal sw: STD_LOGIC_VECTOR(SW_WIDTH-1 downto 0);
     signal cw: STD_LOGIC_VECTOR (CW_WIDTH - 1 downto 0);
 	signal rfData: STD_LOGIC_VECTOR(15 downto 0);
-	
+	signal btnPrev: STD_LOGIC_VECTOR(2 downto 0);
+	signal btnChange: STD_LOGIC_VECTOR(2 downto 0);
 begin
 
     cu: signalAcquireFsm
@@ -74,7 +75,23 @@ begin
 	fourth_compare: genericCompare
         GENERIC MAP(16)
         PORT MAP(x => rfData, y => FOURTH_THRESHOLD_CONSTANT, g => reg0Magnitude[FOURTH_THRESHOLD_BIT_INDEX], e => open, l => open);
-
 	
+	btnChange <= btnPrev xor btn;
+
+	process(clk)
+	begin
+		if rising_edge(clk) then 
+			if resetn = '0' then
+				btnPrev <= (others => '1');
+				btnChange <= (others => '0');
+			else
+				sw[START_CONV_SW_BIT_INDEX] <=  '0' when btnChange = "000" else
+												'1' when (btnChange[0] = '1' and btn[0] = '0')
+													or (btnChange[1] = '1' and btn[1] = '0')
+													or (btnChange[2] = '1' and btn[2] = '0') else
+												'0';
+				btnPrev <= btn;
+			end if;
+		end if;
 		
 end behavior;
