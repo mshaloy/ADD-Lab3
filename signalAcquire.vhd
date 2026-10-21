@@ -17,7 +17,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
-use work.signalAcquire_package.all;
+use work.signalAcquire_Package.all;
+use work.basicBuildingBlocks_package.all;
 
 					-- Include any packages that are instantiated
 
@@ -41,40 +42,40 @@ architecture behavior of signalAcquire is
 	signal btnChange: STD_LOGIC_VECTOR(2 downto 0);
 begin
 
-    cu: signalAcquireFsm
+    cu: signalAcquire_Fsm
 	   PORT MAP(
-	       clk => clk;
-	       resetn => resetn;
-	       sw => sw;
-	       cw => cw;
+	       clk => clk,
+	       resetn => resetn,
+	       sw => sw,
+	       cw => cw
 	   );
 	
 	dataP: signalAcquire_Datapath
 		PORT MAP(
-			clk => clk;
-        	resetn => resetn;
-			cw => cw;
-			sw => sw;
-		    an7606data => an7606data;
-		    rfAddr => '000';
-		    rfData => rfData;
+			clk => clk,
+        	resetn => resetn,
+			cw => cw,
+			sw => sw,
+		    an7606data => an7606data,
+		    rfAddr => "000",
+		    rfData => rfData
 		);
 	
 	first_compare: genericCompare
         GENERIC MAP(16)
-        PORT MAP(x => rfData, y => FIRST_THRESHOLD_CONSTANT, g => reg0Magnitude[FIRST_THRESHOLD_BIT_INDEX], e => open, l => open);
+        PORT MAP(x => rfData, y => FIRST_THRESHOLD_CONSTANT, g => reg0Magnitude(FIRST_THRESHOLD_BIT_INDEX), e => open, l => open);
  
 	second_compare: genericCompare
         GENERIC MAP(16)
-        PORT MAP(x => rfData, y => SECOND_THRESHOLD_CONSTANT, g => reg0Magnitude[SECOND_THRESHOLD_BIT_INDEX], e => open, l => open);
+        PORT MAP(x => rfData, y => SECOND_THRESHOLD_CONSTANT, g => reg0Magnitude(SECOND_THRESHOLD_BIT_INDEX), e => open, l => open);
 
 	third_compare: genericCompare
         GENERIC MAP(16)
-        PORT MAP(x => rfData, y => THIRD_THRESHOLD_CONSTANT, g => reg0Magnitude[THIRD_THRESHOLD_BIT_INDEX], e => open, l => open);
+        PORT MAP(x => rfData, y => THIRD_THRESHOLD_CONSTANT, g => reg0Magnitude(THIRD_THRESHOLD_BIT_INDEX), e => open, l => open);
 
 	fourth_compare: genericCompare
         GENERIC MAP(16)
-        PORT MAP(x => rfData, y => FOURTH_THRESHOLD_CONSTANT, g => reg0Magnitude[FOURTH_THRESHOLD_BIT_INDEX], e => open, l => open);
+        PORT MAP(x => rfData, y => FOURTH_THRESHOLD_CONSTANT, g => reg0Magnitude(FOURTH_THRESHOLD_BIT_INDEX), e => open, l => open);
 	
 	btnChange <= btnPrev xor btn;
 
@@ -85,13 +86,12 @@ begin
 				btnPrev <= (others => '1');
 				btnChange <= (others => '0');
 			else
-				sw[START_CONV_SW_BIT_INDEX] <=  '0' when btnChange = "000" else
-												'1' when (btnChange[0] = '1' and btn[0] = '0')
-													or (btnChange[1] = '1' and btn[1] = '0')
-													or (btnChange[2] = '1' and btn[2] = '0') else
-												'0';
+				if (btnChange(0) = '1' and btn(0) = '0') or (btnChange(1) = '1' and btn(1) = '0') or (btnChange(2) = '1' and btn(2) = '0') then
+				    sw(START_CONV_SW_BIT_INDEX) <= '1';
+				end if;
+				
 				btnPrev <= btn;
 			end if;
 		end if;
-		
+	end process;
 end behavior;
