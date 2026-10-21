@@ -36,10 +36,10 @@ CONSTANT SHORT_DELAY_DONE_SW_BIT_INDEX : NATURAL := 1;
 CONSTANT LONG_DELAY_DONE_SW_BIT_INDEX : NATURAL := 0;
 CONSTANT DATAPATH_SW_WIDTH : NATURAL := 3;
 
-CONSTANT START_CONV_SW_BIT_INDEX : NATURAL := 3;
-CONSTANT BUSY_SW_BIT_INDEX : NATURAL := 4;
+CONSTANT START_CONV_SW_BIT_INDEX : NATURAL := 4;
+CONSTANT BUSY_SW_BIT_INDEX : NATURAL := 3;
 
-CONSTANT SW_WIDTH : NATURAL :=  5;
+CONSTANT SW_WIDTH : NATURAL := 5;
 CONSTANT CW_WIDTH : NATURAL := 11;
 
 CONSTANT LONG_DELAY_50Mhz_CONST_WIDTH : NATURAL := 24;
@@ -49,15 +49,10 @@ CONSTANT SHORT_DELAY_50Mhz_CONST_WIDTH : NATURAL := 8;
 CONSTANT SHORT_DELAY_50Mhz_COUNTS : STD_LOGIC_VECTOR(SHORT_DELAY_50Mhz_CONST_WIDTH - 1 downto 0) := x"10";
 
 -- You need to determine the 16-bit 2's complement ADC values for these voltages
-CONSTANT FOURTH_THRESHOLD_CONSTANT : STD_LOGIC_VECTOR(15 downto 0)  := x"4396";
-CONSTANT THIRD_THRESHOLD_CONSTANT : STD_LOGIC_VECTOR(15 downto 0) := x"32B0";
-CONSTANT SECOND_THRESHOLD_CONSTANT : STD_LOGIC_VECTOR(15 downto 0)   := x"21CB";
-CONSTANT FIRST_THRESHOLD_CONSTANT : STD_LOGIC_VECTOR(15 downto 0)   := x"10E5";
-
-CONSTANT FIRST_THRESHOLD_BIT_INDEX: NATURAL :3;
-CONSTANT SECOND_THRESHOLD_BIT_INDEX: NATURAL :2;
-CONSTANT THIRD_THRESHOLD_BIT_INDEX: NATURAL :1;
-CONSTANT FOURTH_THRESHOLD_BIT_INDEX: NATURAL :0;
+-- CONSTANT FOURTH_THRESHOLD_CONSTANT : STD_LOGIC_VECTOR(15 downto 0)  := x"????";
+-- CONSTANT THIRD_THRESHOLD_CONSTANT : STD_LOGIC_VECTOR(15 downto 0) := x"????";
+-- CONSTANT SECOND_THRESHOLD_CONSTANT : STD_LOGIC_VECTOR(15 downto 0)   := x"????";
+-- CONSTANT FIRST_THRESHOLD_CONSTANT : STD_LOGIC_VECTOR(15 downto 0)   := x"????";
 
 -- component signalAcquire_Fsm is
 -- You need to complete this declaration
@@ -65,7 +60,19 @@ CONSTANT FOURTH_THRESHOLD_BIT_INDEX: NATURAL :0;
 -- component signalAcquire_Datapath is
 -- You need to complete this declaration
 
-type state_type is <complete>
+type state_type is (
+                    RESET_STATE,
+                    LONG_DELAY_STATE,
+                    RESET_AD7606_STATE,
+                    WAIT_STATE,
+                    ASSERT_CONVST_STATE,
+                    WAIT_BUSY_0_STATE,
+                    WAIT_BUSY_1_STATE,
+                    WAIT_VALID_DATA_STATE,
+                    LATCH_STATE,
+                    PAUSE_BETWEEN_CHANNELS_STATE,
+                    CLEAR_SHORT_COUNTER_STATE
+                    );
 
 component signalAcquire is
     PORT ( clk : in  STD_LOGIC;
@@ -85,23 +92,7 @@ component an7606_tb IS
            an7606od: in STD_LOGIC_VECTOR(2 downto 0);
            an7606busy : out STD_LOGIC);
 END component;
-
-component signalAcquire_Fsm is
-    PORT (  clk : in  STD_LOGIC;
-            resetn : in  STD_LOGIC;
-            sw: in STD_LOGIC_VECTOR(SW_WIDTH - 1 downto 0);
-            cw: out STD_LOGIC_VECTOR (CW_WIDTH - 1 downto 0));
-end component;    
-
-component  signalAcquire_Datapath is
-    PORT ( clk : in  STD_LOGIC;
-           resetn : in  STD_LOGIC;
-		   cw : in STD_LOGIC_VECTOR(CW_WIDTH -1 downto 0);
-		   sw : out STD_LOGIC_VECTOR(DATAPATH_SW_WIDTH - 1 downto 0);
-		   an7606data: in STD_LOGIC_VECTOR(15 downto 0);
-		   rfAddr: in STD_LOGIC_VECTOR(2 downto 0);
-		   rfData: out STD_LOGIC_VECTOR(15 downto 0) );
-end component;
+    
     	
 end package;
 
