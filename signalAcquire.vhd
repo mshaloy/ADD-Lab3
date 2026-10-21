@@ -60,7 +60,7 @@ begin
 		    rfAddr => "000",
 		    rfData => rfData
 		);
-	
+
 	first_compare: genericCompare
         GENERIC MAP(16)
         PORT MAP(x => rfData, y => FIRST_THRESHOLD_CONSTANT, g => reg0Magnitude(FIRST_THRESHOLD_BIT_INDEX), e => open, l => open);
@@ -77,19 +77,29 @@ begin
         GENERIC MAP(16)
         PORT MAP(x => rfData, y => FOURTH_THRESHOLD_CONSTANT, g => reg0Magnitude(FOURTH_THRESHOLD_BIT_INDEX), e => open, l => open);
 	
-	btnChange <= btnPrev xor btn;
 
-	button: process(clk)
+	
+	sw(BUSY_SW_BIT_INDEX) <= an7606busy;
+	an7606reset <= cw(RESET_AD7606_CW_BIT_INDEX);
+	an7606convst <= cw(CONVST_CW_BIT_INDEX);
+	an7606cs <= cw(CS_CW_BIT_INDEX);
+	an7606rd <= cw(RD_CW_BIT_INDEX);
+	an7606od <= "011";
+	
+    
+	process(clk)
 	begin
 		if rising_edge(clk) then 
 			if resetn = '0' then
-				btnPrev <= (others => '1');
+				btnPrev <= (others => '0');
 				btnChange <= (others => '0');
 			else
-				if (btnChange(0) = '1' and btn(0) = '0') or (btnChange(1) = '1' and btn(1) = '0') or (btnChange(2) = '1' and btn(2) = '0') then
+                btnChange <= btnPrev xor btn;
+				if (btnChange(0) = '1' and btn(0) = '1') or (btnChange(1) = '1' and btn(1) = '1') or (btnChange(2) = '1' and btn(2) = '1') then
 				    sw(START_CONV_SW_BIT_INDEX) <= '1';
+				else
+				    sw(START_CONV_SW_BIT_INDEX) <= '0';
 				end if;
-				
 				btnPrev <= btn;
 			end if;
 		end if;

@@ -129,7 +129,7 @@ begin
             when RESET_STATE                    => cw <= "11101111110";  -- 0x77E
             when LONG_DELAY_STATE               => cw <= "11101011000";  -- 0x758
             when RESET_AD7606_STATE             => cw <= "11110010000";  -- 0x790
-            when WAIT_TRIGGER_STATE             => cw <= "11100011110";  -- 0x71E
+            when WAIT_TRIGGER_STATE             => cw <= "11101111110";  -- 0x71E
             when ASSERT_CONVST_STATE            => cw <= "01100010000";  -- 0x310
             when WAIT_BUSY_0_STATE              => cw <= "11100011000";  -- 0x718
             when WAIT_BUSY_1_STATE              => cw <= "11100011000";  -- 0x718
